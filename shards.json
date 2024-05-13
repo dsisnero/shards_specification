@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shard YAML Schema",
+  "description": "JSON Schema for shard.yml files used by Shards dependency manager",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the project",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "pattern": "^[a-z][a-z0-9_-]*[a-z0-9]$"
+    },
+    "version": {
+      "description": "The version number of the project",
+      "type": "string",
+      "pattern": "^[0-9]+(\\.[0-9]+)*(\\-[a-z0-9]+)?$"
+    },
+    "authors": {
+      "description": "A list of authors",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[^<]+(\\s+<[^>]+>)?$"
+      }
+    },
+    "crystal": {
+      "description": "Supported Crystal versions",
+      "type": "string"
+    },
+    "dependencies": {
+      "description": "Required dependencies",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/dependency" }
+    },
+    "development_dependencies": {
+      "description": "Development dependencies",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/dependency" }
+    },
+    "description": {
+      "description": "A single line description of the project",
+      "type": "string"
+    },
+    "documentation": {
+      "description": "URL to project documentation",
+      "type": "string",
+      "format": "uri"
+    },
+    "executables": {
+      "description": "List of executables to install",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "homepage": {
+      "description": "URL of the project's homepage",
+      "type": "string",
+      "format": "uri"
+    },
+    "libraries": {
+      "description": "Shared libraries the shard links to",
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "license": {
+      "description": "Project license",
+      "type": "string"
+    },
+    "repository": {
+      "description": "URL of the project's repository",
+      "type": "string",
+      "format": "uri"
+    },
+    "scripts": {
+      "description": "Script hooks",
+      "type": "object",
+      "properties": {
+        "postinstall": {
+          "description": "Post-install script",
+          "type": "string"
+        }
+      }
+    },
+    "targets": {
+      "description": "Build targets",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "main": {
+            "description": "Path to the main source file",
+            "type": "string"
+          }
+        },
+        "required": ["main"]
+      }
+    }
+  },
+  "required": ["name", "version"],
+  "definitions": {
+    "dependency": {
+      "oneOf": [
+        { "required": ["path"] },
+        { "required": ["git"] },
+        { "required": ["github"] },
+        { "required": ["gitlab"] },
+        { "required": ["bitbucket"] },
+        { "required": ["hg"] },
+        { "required": ["fossil"] }
+      ],
+      "properties": {
+        "path": {
+          "description": "Local path to the dependency",
+          "type": "string"
+        },
+        "git": {
+          "description": "Git repository URL",
+          "type": "string",
+          "format": "uri"
+        },
+        "github": {
+          "description": "GitHub repository (user/repo)",
+          "type": "string"
+        },
+        "gitlab": {
+          "description": "GitLab repository (user/repo)",
+          "type": "string"
+        },
+        "bitbucket": {
+          "description": "Bitbucket repository (user/repo)",
+          "type": "string"
+        },
+        "hg": {
+          "description": "Mercurial repository URL",
+          "type": "string",
+          "format": "uri"
+        },
+        "fossil": {
+          "description": "Fossil repository URL",
+          "type": "string",
+          "format": "uri"
+        },
+        "version": {
+          "description": "Version requirement for the dependency",
+          "type": "string"
+        },
+        "branch": {
+          "description": "Branch name",
+          "type": "string"
+        },
+        "commit": {
+          "description": "Commit hash",
+          "type": "string"
+        },
+        "tag": {
+          "description": "Tag name",
+          "type": "string"
+        },
+        "bookmark": {
+          "description": "Bookmark name (Mercurial)",
+          "type": "string"
+        }
+      }
+    }
+  }
+}
